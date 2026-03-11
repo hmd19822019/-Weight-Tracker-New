@@ -90,3 +90,6 @@ logs/
 # Backup
 *.bak
 *.backup
+
+# Worktrees
+.worktrees/
