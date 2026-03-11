@@ -1,0 +1,34 @@
+{
+  "name": "weight-tracker-monorepo",
+  "version": "2.0.0",
+  "private": true,
+  "description": "体重管理 App - React Native + Taro 跨平台版本",
+  "scripts": {
+    "dev:mobile": "pnpm --filter mobile start",
+    "dev:miniapp": "pnpm --filter miniapp dev:weapp",
+    "dev:server": "pnpm --filter server dev",
+    "build:android": "pnpm --filter mobile android:build",
+    "build:ios": "pnpm --filter mobile ios:build",
+    "build:miniapp": "pnpm --filter miniapp build:weapp",
+    "build:server": "pnpm --filter server build",
+    "test": "pnpm -r test",
+    "test:coverage": "pnpm -r test --coverage",
+    "lint": "pnpm -r lint",
+    "type-check": "pnpm -r type-check",
+    "clean": "pnpm -r clean && rm -rf node_modules"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.15.0",
+    "@typescript-eslint/parser": "^6.15.0",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "prettier": "^3.1.1",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=8.0.0"
+  }
+}
