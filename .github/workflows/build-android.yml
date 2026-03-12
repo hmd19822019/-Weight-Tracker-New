@@ -3,6 +3,7 @@ name: Build Android APK
 on:
   push:
     branches:
+      - master
       - feature/phase2-mobile-rn
   pull_request:
     branches:
@@ -28,9 +29,7 @@ jobs:
           version: 10
 
       - name: Install dependencies
-        run: |
-          cd packages/mobile
-          pnpm install
+        run: pnpm install
 
       - name: Setup Java
         uses: actions/setup-java@v4
