@@ -2,6 +2,7 @@ import { Router } from 'express'
 import { PrismaClient } from '@prisma/client'
 import { AppError } from '../middleware/errorHandler'
 import { authenticate, AuthRequest } from '../middleware/auth'
+import { baiduAIService } from '../services/baiduAI'
 
 const router = Router()
 const prisma = new PrismaClient()
@@ -127,15 +128,10 @@ router.post('/recognize', authenticate, async (req: AuthRequest, res, next) => {
       throw new AppError('Image URL is required', 400)
     }
 
-    // TODO: Integrate with Baidu AI service
-    // For now, return mock data
-    const mockResult = {
-      name: '苹果',
-      calories: 52,
-      confidence: 0.95,
-    }
+    // 调用百度 AI 服务识别食物
+    const result = await baiduAIService.recognizeFood(imageUrl)
 
-    res.json({ success: true, result: mockResult })
+    res.json({ success: true, result })
   } catch (error) {
     next(error)
   }
