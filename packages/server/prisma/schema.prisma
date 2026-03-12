@@ -1,0 +1,133 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id            String   @id @default(uuid())
+  phone         String?  @unique
+  wechatOpenId  String?  @unique
+  passwordHash  String?
+  nickname      String?
+  avatar        String?
+  height        Int?
+  gender        String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  weightRecords WeightRecord[]
+  waterIntakes  WaterIntake[]
+  foodRecords   FoodRecord[]
+  goals         Goal[]
+  achievements  Achievement[]
+  settings      Settings?
+
+  @@index([phone])
+  @@index([wechatOpenId])
+}
+
+model WeightRecord {
+  id            String   @id @default(uuid())
+  userId        String
+  date          DateTime
+  weight        Float
+  bodyFat       Float?
+  notes         String?
+  photoUrl      String?
+  localPhotoUri String?
+  syncStatus    String   @default("local")
+  version       Int      @default(1)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([date])
+  @@index([syncStatus])
+}
+
+model WaterIntake {
+  id         String   @id @default(uuid())
+  userId     String
+  date       String
+  amount     Int
+  target     Int
+  syncStatus String   @default("local")
+  version    Int      @default(1)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+  @@index([userId])
+}
+
+model FoodRecord {
+  id         String   @id @default(uuid())
+  userId     String
+  date       DateTime
+  name       String
+  calories   Int
+  photoUrl   String?
+  confidence Float?
+  notes      String?
+  syncStatus String   @default("local")
+  version    Int      @default(1)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([date])
+}
+
+model Goal {
+  id          String   @id @default(uuid())
+  userId      String
+  startWeight Float
+  targetWeight Float
+  startDate   DateTime
+  endDate     DateTime
+  isActive    Boolean  @default(true)
+  syncStatus  String   @default("local")
+  version     Int      @default(1)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([isActive])
+}
+
+model Achievement {
+  id         String   @id @default(uuid())
+  userId     String
+  type       String
+  unlockedAt DateTime @default(now())
+  syncStatus String   @default("local")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, type])
+  @@index([userId])
+}
+
+model Settings {
+  id            String  @id @default(uuid())
+  userId        String  @unique
+  darkMode      Boolean @default(false)
+  language      String  @default("zh")
+  waterTarget   Int     @default(2000)
+  calorieTarget Int     @default(2000)
+  autoSync      Boolean @default(true)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
