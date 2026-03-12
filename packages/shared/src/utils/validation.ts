@@ -66,8 +66,10 @@ export function validateFoodRecord(record: unknown): ValidationResult {
 
 export function generateUUID(): string {
   // Use crypto.randomUUID if available (Node 14.17+ / modern browsers)
-  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
-    return crypto.randomUUID()
+  if (typeof globalThis !== 'undefined' &&
+      typeof (globalThis as any).crypto !== 'undefined' &&
+      typeof (globalThis as any).crypto.randomUUID === 'function') {
+    return (globalThis as any).crypto.randomUUID()
   }
 
   // Fallback: RFC 4122 v4 UUID
