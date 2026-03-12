@@ -5,6 +5,8 @@ import dotenv from 'dotenv'
 import { errorHandler } from './middleware/errorHandler'
 import { generalLimiter } from './middleware/rateLimiter'
 import { logger } from './utils/logger'
+import authRoutes from './routes/auth'
+import weightRoutes from './routes/weight'
 
 dotenv.config()
 
@@ -22,7 +24,9 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() })
 })
 
-// Routes will be added here
+// Routes
+app.use('/api/auth', authRoutes)
+app.use('/api/weight', weightRoutes)
 
 // Error handler (must be last)
 app.use(errorHandler)
