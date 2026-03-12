@@ -52,9 +52,11 @@ router.post('/verify-code', authLimiter, async (req, res, next) => {
     const secret = process.env.JWT_SECRET
     if (!secret) throw new AppError('JWT secret not configured', 500)
 
-    const token = jwt.sign({ userId: user.id }, secret, {
-      expiresIn: process.env.JWT_EXPIRES_IN || '7d',
-    })
+    const token = jwt.sign(
+      { userId: user.id },
+      secret,
+      { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
+    )
 
     res.json({
       success: true,
@@ -94,9 +96,11 @@ router.post('/wechat-login', authLimiter, async (req, res, next) => {
     const secret = process.env.JWT_SECRET
     if (!secret) throw new AppError('JWT secret not configured', 500)
 
-    const token = jwt.sign({ userId: user.id }, secret, {
-      expiresIn: process.env.JWT_EXPIRES_IN || '7d',
-    })
+    const token = jwt.sign(
+      { userId: user.id },
+      secret,
+      { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
+    )
 
     res.json({
       success: true,
