@@ -3,16 +3,22 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { RecordScreen } from '../screens/RecordScreen'
 import { HistoryScreen } from '../screens/HistoryScreen'
 import { StatisticsScreen } from '../screens/StatisticsScreen'
+import { SettingsScreen } from '../screens/SettingsScreen'
 
 export type TabParamList = {
   Record: undefined
   History: undefined
   Statistics: undefined
+  Settings: undefined
 }
 
 const Tab = createBottomTabNavigator<TabParamList>()
 
-export const TabNavigator = () => {
+interface TabNavigatorProps {
+  onLogout: () => void
+}
+
+export const TabNavigator: React.FC<TabNavigatorProps> = ({ onLogout }) => {
   return (
     <Tab.Navigator
       screenOptions={{
@@ -45,6 +51,15 @@ export const TabNavigator = () => {
           tabBarLabel: '统计',
         }}
       />
+      <Tab.Screen
+        name="Settings"
+        options={{
+          title: '设置',
+          tabBarLabel: '设置',
+        }}
+      >
+        {() => <SettingsScreen onLogout={onLogout} />}
+      </Tab.Screen>
     </Tab.Navigator>
   )
 }
