@@ -34,6 +34,21 @@ jobs:
       - name: Install mobile dependencies
         run: cd packages/mobile && pnpm install
 
+      - name: Debug - Check directory structure
+        run: |
+          echo "=== Root node_modules structure ==="
+          ls -la node_modules/@react-native/ 2>/dev/null || echo "No @react-native in root"
+          echo ""
+          echo "=== Mobile node_modules structure ==="
+          ls -la packages/mobile/node_modules/@react-native/ 2>/dev/null || echo "No @react-native in mobile"
+          echo ""
+          echo "=== Check gradle-plugin specifically ==="
+          ls -la packages/mobile/node_modules/@react-native/gradle-plugin 2>/dev/null || echo "gradle-plugin NOT FOUND in mobile/node_modules"
+          ls -la node_modules/@react-native/gradle-plugin 2>/dev/null || echo "gradle-plugin NOT FOUND in root/node_modules"
+          echo ""
+          echo "=== Check if it's a symlink ==="
+          file packages/mobile/node_modules/@react-native/gradle-plugin 2>/dev/null || echo "Path does not exist"
+
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
