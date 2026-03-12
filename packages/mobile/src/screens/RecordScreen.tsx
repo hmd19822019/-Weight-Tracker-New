@@ -1,16 +1,21 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import {
   View,
   Text,
   ScrollView,
   StyleSheet,
   Alert,
+  TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { WeightInput } from '../components/WeightInput'
 import { WaterIntakeBar } from '../components/WaterIntakeBar'
+import { SyncStatus } from '../components/SyncStatus'
 import { colors, typography } from '../theme'
 import { storage, STORAGE_KEYS } from '../utils/storage'
+import { useNetworkStatus } from '../utils/useNetworkStatus'
+import { syncService } from '../utils/syncService'
 
 interface TodayStats {
   lastWeight?: number
@@ -24,6 +29,40 @@ export const RecordScreen = () => {
     waterTarget: 2000,
   })
   const [saving, setSaving] = useState(false)
+  const [syncing, setSyncing] = useState(false)
+  const [lastSyncTime, setLastSyncTime] = useState<Date>()
+  const { isOnline } = useNetworkStatus()
+
+  useEffect(() => {
+    loadSettings()
+  }, [])
+
+  const loadSettings = async () => {
+    const settings = await storage.getItem<any>(STORAGE_KEYS.SETTINGS) || {}
+    if (settings.autoSync && isOnline) {
+      handleSync()
+    }
+  }
+
+  const handleSync = useCallback(async () => {
+    if (!isOnline) {
+      Alert.alert('提示', '当前离线，无法同步')
+      return
+    }
+
+    setSyncing(true)
+    try {
+      const result = await syncService.fullSync()
+      if (result.success) {
+        setLastSyncTime(new Date())
+      }
+      Alert.alert(result.success ? '成功' : '失败', result.message)
+    } catch (error) {
+      Alert.alert('错误', '同步失败')
+    } finally {
+      setSyncing(false)
+    }
+  }, [isOnline])
 
   const handleWeightSubmit = useCallback(
     async (weight: number, date: Date, notes?: string) => {
@@ -64,6 +103,27 @@ export const RecordScreen = () => {
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
       >
+        {/* Sync status bar */}
+        <View style={styles.syncBar}>
+          <SyncStatus
+            isOnline={!!isOnline}
+            isSyncing={syncing}
+            lastSyncTime={lastSyncTime}
+          />
+          <TouchableOpacity
+            style={styles.syncButton}
+            onPress={handleSync}
+            disabled={syncing || !isOnline}
+            activeOpacity={0.7}
+          >
+            {syncing ? (
+              <ActivityIndicator size="small" color={colors.light.primary} />
+            ) : (
+              <Text style={styles.syncButtonText}>同步</Text>
+            )}
+          </TouchableOpacity>
+        </View>
+
         {/* Today's summary */}
         <View style={styles.summaryCard}>
           <Text style={styles.summaryTitle}>今日概览</Text>
@@ -151,5 +211,23 @@ const styles = StyleSheet.create({
     ...typography.h3,
     color: colors.light.text,
     marginBottom: 12,
+  },
+  syncBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  syncButton: {
+    paddingHorizontal: 16,
+    paddingVertical: 6,
+    backgroundColor: colors.light.surface,
+    borderRadius: 12,
+    minWidth: 56,
+    alignItems: 'center',
+  },
+  syncButtonText: {
+    ...typography.caption,
+    color: colors.light.primary,
   },
 })
