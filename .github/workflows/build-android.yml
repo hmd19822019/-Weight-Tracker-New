@@ -3,6 +3,7 @@ name: Build Android APK
 on:
   push:
     branches:
+      - master
       - feature/phase2-mobile-rn
   pull_request:
     branches:
