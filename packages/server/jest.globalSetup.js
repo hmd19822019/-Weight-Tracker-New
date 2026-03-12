@@ -1,9 +1,13 @@
-import { PrismaClient } from '@prisma/client'
+const dotenv = require('dotenv')
+const path = require('path')
 
-const prisma = new PrismaClient()
+dotenv.config({ path: path.resolve(__dirname, '.env.test') })
 
-// 在所有测试之前运行一次（全局清理）
-beforeAll(async () => {
+module.exports = async () => {
+  const { PrismaClient } = require('@prisma/client')
+  const prisma = new PrismaClient()
+
+  // 全局清理：在所有测试套件开始前运行一次
   await prisma.achievement.deleteMany({})
   await prisma.goal.deleteMany({})
   await prisma.foodRecord.deleteMany({})
@@ -16,6 +20,4 @@ beforeAll(async () => {
     }
   })
   await prisma.$disconnect()
-})
-
-export { prisma }
+}

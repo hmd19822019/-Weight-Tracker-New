@@ -76,6 +76,7 @@ model FoodRecord {
   calories   Int
   photoUrl   String?
   confidence Float?
+  notes      String?
   syncStatus String   @default("local")
   version    Int      @default(1)
   createdAt  DateTime @default(now())

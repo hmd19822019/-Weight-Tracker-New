@@ -10,13 +10,12 @@ describe('Achievement Routes', () => {
   let userId: string
 
   beforeAll(async () => {
-    // 创建测试用户
+    // 创建测试用户（使用验证码登录）
     const response = await request(app)
-      .post('/api/auth/register')
+      .post('/api/auth/verify-code')
       .send({
         phone: '13800000005',
-        password: 'Test123456',
-        nickname: 'Achievement Test User'
+        code: '123456'
       })
 
     token = response.body.token
@@ -24,11 +23,16 @@ describe('Achievement Routes', () => {
   })
 
   afterAll(async () => {
-    // 清理测试数据
-    await prisma.achievement.deleteMany({ where: { userId } })
-    await prisma.weightRecord.deleteMany({ where: { userId } })
-    await prisma.goal.deleteMany({ where: { userId } })
-    await prisma.user.delete({ where: { id: userId } })
+    if (userId) {
+      // Delete all related data first to avoid foreign key constraints
+      await prisma.achievement.deleteMany({ where: { userId } })
+      await prisma.goal.deleteMany({ where: { userId } })
+      await prisma.foodRecord.deleteMany({ where: { userId } })
+      await prisma.waterIntake.deleteMany({ where: { userId } })
+      await prisma.weightRecord.deleteMany({ where: { userId } })
+      await prisma.settings.deleteMany({ where: { userId } })
+      await prisma.user.deleteMany({ where: { id: userId } })
+    }
     await prisma.$disconnect()
   })
 

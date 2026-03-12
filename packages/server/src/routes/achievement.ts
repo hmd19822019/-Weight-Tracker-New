@@ -248,9 +248,8 @@ router.post('/sync', authenticate, async (req: AuthRequest, res, next) => {
           },
         })
         synced.push(created)
-      } else {
-        synced.push(existing)
       }
+      // Skip existing achievements - don't add to synced array
     }
 
     res.json({ success: true, synced })

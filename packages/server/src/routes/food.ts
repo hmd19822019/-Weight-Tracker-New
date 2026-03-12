@@ -66,6 +66,24 @@ router.post('/', authenticate, async (req: AuthRequest, res, next) => {
   }
 })
 
+// GET /api/food/:id - Get specific food record
+router.get('/:id', authenticate, async (req: AuthRequest, res, next) => {
+  try {
+    const userId = req.userId
+    if (!userId) throw new AppError('User not authenticated', 401)
+
+    const { id } = req.params
+
+    const record = await prisma.foodRecord.findUnique({ where: { id } })
+    if (!record) throw new AppError('Record not found', 404)
+    if (record.userId !== userId) throw new AppError('Unauthorized', 403)
+
+    res.json({ success: true, record })
+  } catch (error) {
+    next(error)
+  }
+})
+
 // PUT /api/food/:id - Update food record
 router.put('/:id', authenticate, async (req: AuthRequest, res, next) => {
   try {
@@ -73,7 +91,7 @@ router.put('/:id', authenticate, async (req: AuthRequest, res, next) => {
     if (!userId) throw new AppError('User not authenticated', 401)
 
     const { id } = req.params
-    const { name, calories, photoUrl } = req.body
+    const { name, calories, photoUrl, notes } = req.body
 
     // Verify ownership
     const existing = await prisma.foodRecord.findUnique({ where: { id } })
@@ -86,6 +104,7 @@ router.put('/:id', authenticate, async (req: AuthRequest, res, next) => {
         name: name || undefined,
         calories: calories !== undefined ? parseInt(calories) : undefined,
         photoUrl: photoUrl !== undefined ? photoUrl : undefined,
+        notes: notes !== undefined ? notes : undefined,
         version: { increment: 1 },
       },
     })
