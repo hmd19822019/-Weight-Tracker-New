@@ -31,8 +31,10 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Install mobile dependencies
-        run: cd packages/mobile && pnpm install --shamefully-hoist
+      - name: Install mobile dependencies with npm
+        run: |
+          cd packages/mobile
+          npm install
 
       - name: Debug - Verify shamefully-hoist worked
         run: |
