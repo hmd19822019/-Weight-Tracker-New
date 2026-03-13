@@ -31,14 +31,24 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Install mobile dependencies with npm
+      - name: Build shared package
+        run: |
+          cd packages/shared
+          npm install
+          npm run build
+
+      - name: Install mobile dependencies
         run: |
           cd packages/mobile
-          echo "=== Attempting npm install ==="
-          npm install --verbose 2>&1 || echo "npm install failed with exit code $?"
+          # Remove pnpm symlinks
+          rm -rf node_modules
+          # Temporarily replace workspace: with file: for npm
+          sed -i 's/"@weight-tracker\/shared": "workspace:\*"/"@weight-tracker\/shared": "file:..\/shared"/' package.json
+          npm install
           echo ""
-          echo "=== Check what was installed ==="
-          ls -la node_modules/ 2>/dev/null | head -20 || echo "node_modules does not exist"
+          echo "=== Verify react-native is real directory ==="
+          file node_modules/react-native
+          ls -la node_modules/react-native/ReactAndroid/gradle.properties 2>/dev/null || echo "gradle.properties NOT FOUND"
 
       - name: Debug - Verify shamefully-hoist worked
         run: |
