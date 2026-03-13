@@ -32,7 +32,7 @@ jobs:
         run: pnpm install
 
       - name: Install mobile dependencies
-        run: cd packages/mobile && pnpm install
+        run: cd packages/mobile && pnpm install --shamefully-hoist
 
       - name: Debug - Check directory structure
         run: |
