@@ -34,38 +34,11 @@ jobs:
       - name: Install mobile dependencies
         run: |
           cd packages/mobile
-          # Remove pnpm symlinks
           rm -rf node_modules
-          # Temporarily replace workspace: with file: for npm
+          cp package.json package.json.backup
           sed -i 's/"@weight-tracker\/shared": "workspace:\*"/"@weight-tracker\/shared": "file:..\/shared"/' package.json
           npm install
-          echo ""
-          echo "=== Verify react-native is real directory ==="
-          file node_modules/react-native
-          ls -la node_modules/react-native/ReactAndroid/gradle.properties 2>/dev/null || echo "gradle.properties NOT FOUND"
-
-      - name: Debug - Verify shamefully-hoist worked
-        run: |
-          echo "=== Check if mobile/node_modules exists ==="
-          ls -la packages/mobile/node_modules/ 2>/dev/null | head -20 || echo "mobile/node_modules does NOT exist"
-          echo ""
-          echo "=== Check react-native specifically ==="
-          ls -la packages/mobile/node_modules/react-native 2>/dev/null | head -10 || echo "react-native NOT in mobile/node_modules"
-
-      - name: Debug - Check directory structure
-        run: |
-          echo "=== Root node_modules structure ==="
-          ls -la node_modules/@react-native/ 2>/dev/null || echo "No @react-native in root"
-          echo ""
-          echo "=== Mobile node_modules structure ==="
-          ls -la packages/mobile/node_modules/@react-native/ 2>/dev/null || echo "No @react-native in mobile"
-          echo ""
-          echo "=== Check gradle-plugin specifically ==="
-          ls -la packages/mobile/node_modules/@react-native/gradle-plugin 2>/dev/null || echo "gradle-plugin NOT FOUND in mobile/node_modules"
-          ls -la node_modules/@react-native/gradle-plugin 2>/dev/null || echo "gradle-plugin NOT FOUND in root/node_modules"
-          echo ""
-          echo "=== Check if it's a symlink ==="
-          file packages/mobile/node_modules/@react-native/gradle-plugin 2>/dev/null || echo "Path does not exist"
+          mv package.json.backup package.json
 
       - name: Setup Java
         uses: actions/setup-java@v4
