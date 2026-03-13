@@ -34,7 +34,11 @@ jobs:
       - name: Install mobile dependencies with npm
         run: |
           cd packages/mobile
-          npm install
+          echo "=== Attempting npm install ==="
+          npm install --verbose 2>&1 || echo "npm install failed with exit code $?"
+          echo ""
+          echo "=== Check what was installed ==="
+          ls -la node_modules/ 2>/dev/null | head -20 || echo "node_modules does not exist"
 
       - name: Debug - Verify shamefully-hoist worked
         run: |
