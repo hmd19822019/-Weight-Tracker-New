@@ -23,6 +23,7 @@ interface TabNavigatorProps {
 }
 
 export const TabNavigator: React.FC<TabNavigatorProps> = ({ onLogout }) => {
+  console.log('[TabNavigator] Rendering TabNavigator')
   return (
     <Tab.Navigator
       screenOptions={{

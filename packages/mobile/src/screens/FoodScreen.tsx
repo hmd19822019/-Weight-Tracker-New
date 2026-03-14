@@ -19,6 +19,7 @@ interface FoodRecord {
 const CALORIE_TARGET = 2000
 
 export const FoodScreen: React.FC = () => {
+  console.log('[FoodScreen] Component mounting')
   const [records, setRecords] = useState<FoodRecord[]>([])
   const [name, setName] = useState('')
   const [calories, setCalories] = useState('')

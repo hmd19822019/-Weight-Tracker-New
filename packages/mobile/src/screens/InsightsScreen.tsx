@@ -54,6 +54,7 @@ function getHealthTips(records: WeightRecord[]): HealthTip[] {
 }
 
 export const InsightsScreen: React.FC = () => {
+  console.log('[InsightsScreen] Component mounting')
   const [records, setRecords] = useState<WeightRecord[]>([])
   const [height, setHeight] = useState(0)
   const [loading, setLoading] = useState(true)

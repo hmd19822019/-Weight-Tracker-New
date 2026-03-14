@@ -8,6 +8,7 @@ import { colors, typography } from '../theme'
 import { storage, STORAGE_KEYS } from '../utils/storage'
 
 export const AchievementsScreen: React.FC = () => {
+  console.log('[AchievementsScreen] Component mounting')
   const [unlocked, setUnlocked] = useState<AchievementType[]>([])
   const [newUnlock, setNewUnlock] = useState<AchievementType | null>(null)
 

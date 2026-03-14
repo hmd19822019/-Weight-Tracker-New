@@ -27,6 +27,7 @@ function App() {
   }
 
   const handleLoginSuccess = () => {
+    console.log('[App] Login success, setting authenticated to true')
     setIsAuthenticated(true)
   }
 
@@ -48,11 +49,17 @@ function App() {
     <SafeAreaProvider>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
       {isAuthenticated ? (
-        <NavigationContainer>
-          <TabNavigator onLogout={handleLogout} />
-        </NavigationContainer>
+        <>
+          {console.log('[App] Rendering TabNavigator')}
+          <NavigationContainer>
+            <TabNavigator onLogout={handleLogout} />
+          </NavigationContainer>
+        </>
       ) : (
-        <LoginScreen onLoginSuccess={handleLoginSuccess} />
+        <>
+          {console.log('[App] Rendering LoginScreen')}
+          <LoginScreen onLoginSuccess={handleLoginSuccess} />
+        </>
       )}
     </SafeAreaProvider>
   )
