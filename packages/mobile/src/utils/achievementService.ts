@@ -51,7 +51,7 @@ export function checkAchievements(
 
   // goal_achieved
   if (goal?.isActive) {
-    const sorted = [...records].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    const sorted = records.slice().sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     const latest = sorted[0].weight
     if (latest <= goal.targetWeight) unlocked.push('goal_achieved')
   }

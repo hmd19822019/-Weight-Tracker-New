@@ -85,7 +85,7 @@ export const FoodScreen: React.FC = () => {
         date: new Date().toISOString(),
         photoUri: photoUri || undefined,
       }
-      await storage.setItem('food_records', [...all, newRecord])
+      await storage.setItem('food_records', all.concat([newRecord]))
       setName('')
       setCalories('')
       setPhotoUri(null)

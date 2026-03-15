@@ -20,7 +20,7 @@ export const TrendChart: React.FC<TrendChartProps> = ({ records }) => {
     )
   }
 
-  const sorted = [...records].sort((a, b) => a.date.getTime() - b.date.getTime())
+  const sorted = records.slice().sort((a, b) => a.date.getTime() - b.date.getTime())
   const last7 = sorted.slice(-7)
 
   const pred7 = predictWeight(sorted, 7)

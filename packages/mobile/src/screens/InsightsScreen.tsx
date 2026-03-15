@@ -8,7 +8,7 @@ import {
 } from 'react-native'
 
 import { BMIGauge } from '../components/BMIGauge'
-// import { TrendChart } from '../components/TrendChart'
+import { TrendChart } from '../components/TrendChart'
 import { colors, typography } from '../theme'
 import { storage, STORAGE_KEYS } from '../utils/storage'
 
@@ -31,7 +31,7 @@ function getHealthTips(records: WeightRecord[]): HealthTip[] {
     return tips
   }
 
-  const sorted = [...records].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+  const sorted = records.slice().sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
   const latest = sorted[0].weight
 
   if (records.length >= 7) {
@@ -78,12 +78,14 @@ export const InsightsScreen: React.FC = () => {
   const handleHeightChange = useCallback(async (h: number) => {
     setHeight(h)
     const settings = await storage.getItem<any>(STORAGE_KEYS.SETTINGS) || {}
-    await storage.setItem(STORAGE_KEYS.SETTINGS, { ...settings, height: h })
+    await storage.setItem(STORAGE_KEYS.SETTINGS, Object.assign({}, settings, { height: h }))
   }, [])
 
   const latestWeight = records.length > 0
-    ? [...records].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())[0].weight
+    ? records.slice().sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())[0].weight
     : 0
+
+  const trendRecords = records.map(r => ({ date: new Date(r.date), weight: r.weight }))
 
   const tips = getHealthTips(records)
 
@@ -102,9 +104,7 @@ export const InsightsScreen: React.FC = () => {
         <BMIGauge weight={latestWeight} height={height} onHeightChange={handleHeightChange} />
 
         <Text style={styles.sectionTitle}>体重趋势</Text>
-        <View style={styles.tipsCard}>
-          <Text style={styles.tipText}>图表功能开发中...</Text>
-        </View>
+        <TrendChart records={trendRecords} />
 
         <Text style={styles.sectionTitle}>健康建议</Text>
         <View style={styles.tipsCard}>

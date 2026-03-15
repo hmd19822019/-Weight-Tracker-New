@@ -4,6 +4,8 @@ import { RecordScreen } from '../screens/RecordScreen'
 import { HistoryScreen } from '../screens/HistoryScreen'
 import { StatisticsScreen } from '../screens/StatisticsScreen'
 import { InsightsScreen } from '../screens/InsightsScreen'
+import { FoodScreen } from '../screens/FoodScreen'
+import { AchievementsScreen } from '../screens/AchievementsScreen'
 import { SettingsScreen } from '../screens/SettingsScreen'
 
 export type TabParamList = {
@@ -11,6 +13,8 @@ export type TabParamList = {
   History: undefined
   Statistics: undefined
   Insights: undefined
+  Food: undefined
+  Achievements: undefined
   Settings: undefined
 }
 
@@ -29,17 +33,17 @@ export const TabNavigator: React.FC<TabNavigatorProps> = ({ onLogout }) => {
         tabBarActiveTintColor: '#007AFF',
         tabBarInactiveTintColor: '#8E8E93',
         tabBarStyle: {
-          paddingBottom: 10,
-          paddingTop: 10,
-          height: 75,
+          paddingBottom: 8,
+          paddingTop: 6,
+          height: 70,
           borderTopWidth: 1,
           borderTopColor: '#E5E5EA',
           backgroundColor: '#FFFFFF',
         },
         tabBarLabelStyle: {
-          fontSize: 13,
+          fontSize: 11,
           fontWeight: '600',
-          marginTop: 2,
+          marginTop: 1,
         },
         tabBarIconStyle: {
           marginTop: 2,
@@ -76,6 +80,22 @@ export const TabNavigator: React.FC<TabNavigatorProps> = ({ onLogout }) => {
         options={{
           title: '洞察',
           tabBarLabel: '💡 洞察',
+        }}
+      />
+      <Tab.Screen
+        name="Food"
+        component={FoodScreen}
+        options={{
+          title: '饮食',
+          tabBarLabel: '🍎 饮食',
+        }}
+      />
+      <Tab.Screen
+        name="Achievements"
+        component={AchievementsScreen}
+        options={{
+          title: '成就',
+          tabBarLabel: '🏆 成就',
         }}
       />
       <Tab.Screen
