@@ -25,23 +25,24 @@ export const TabNavigator: React.FC<TabNavigatorProps> = ({ onLogout }) => {
   return (
     <Tab.Navigator
       screenOptions={{
-        headerShown: true,
+        headerShown: false,
         tabBarActiveTintColor: '#007AFF',
         tabBarInactiveTintColor: '#8E8E93',
         tabBarStyle: {
-          paddingBottom: 8,
-          paddingTop: 8,
-          height: 70,
+          paddingBottom: 10,
+          paddingTop: 10,
+          height: 75,
           borderTopWidth: 1,
           borderTopColor: '#E5E5EA',
+          backgroundColor: '#FFFFFF',
         },
         tabBarLabelStyle: {
-          fontSize: 12,
-          fontWeight: '500',
-          marginTop: 4,
+          fontSize: 13,
+          fontWeight: '600',
+          marginTop: 2,
         },
         tabBarIconStyle: {
-          marginTop: 4,
+          marginTop: 2,
         },
       }}
     >

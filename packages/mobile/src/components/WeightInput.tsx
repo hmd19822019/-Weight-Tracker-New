@@ -7,7 +7,8 @@ import {
   StyleSheet,
   Alert,
   Modal,
-  ScrollView,
+  Pressable,
+  FlatList,
 } from 'react-native'
 import { colors, typography } from '../theme'
 
@@ -24,9 +25,44 @@ function formatDate(d: Date) {
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`
 }
 
-// Generate arrays without Array.from for better compatibility
-const HOURS = [...new Array(24)].map((_, i) => i)
-const MINUTES = [...new Array(60)].map((_, i) => i)
+// Generate arrays using basic loops for maximum compatibility
+function generateHours() {
+  const hours = []
+  for (let i = 0; i < 24; i++) {
+    hours.push(i)
+  }
+  return hours
+}
+
+function generateMinutes() {
+  const minutes = []
+  for (let i = 0; i < 60; i++) {
+    minutes.push(i)
+  }
+  return minutes
+}
+
+function generateMonths() {
+  const months = []
+  for (let i = 0; i < 12; i++) {
+    months.push(i)
+  }
+  return months
+}
+
+function generateYears() {
+  const years = []
+  const currentYear = new Date().getFullYear()
+  for (let i = 0; i < 5; i++) {
+    years.push(currentYear - i)
+  }
+  return years
+}
+
+const HOURS = generateHours()
+const MINUTES = generateMinutes()
+const MONTHS = generateMonths()
+const YEARS = generateYears()
 
 function buildDays(year: number, month: number) {
   const count = new Date(year, month + 1, 0).getDate()
@@ -37,9 +73,6 @@ function buildDays(year: number, month: number) {
   return days
 }
 
-const MONTHS = [...new Array(12)].map((_, i) => i)
-const YEARS = [...new Array(5)].map((_, i) => new Date().getFullYear() - i)
-
 interface PickerColumnProps {
   items: number[]
   selected: number
@@ -47,42 +80,60 @@ interface PickerColumnProps {
   label?: (v: number) => string
 }
 
-const PickerColumn: React.FC<PickerColumnProps> = ({ items, selected, onSelect, label }) => (
-  <ScrollView
-    style={pickerStyles.column}
-    showsVerticalScrollIndicator={false}
-    nestedScrollEnabled={true}
-  >
-    {items.map((item) => (
-      <TouchableOpacity
-        key={item}
-        style={[pickerStyles.item, item === selected && pickerStyles.itemSelected]}
+const PickerColumn: React.FC<PickerColumnProps> = ({ items, selected, onSelect, label }) => {
+  const renderItem = ({ item }: { item: number }) => {
+    const isSelected = item === selected
+    return (
+      <Pressable
         onPress={() => {
           console.log('[PickerColumn] Item pressed:', item)
           onSelect(item)
         }}
-        activeOpacity={0.6}
+        style={({ pressed }) => [
+          pickerStyles.item,
+          isSelected && pickerStyles.itemSelected,
+          pressed && pickerStyles.itemPressed,
+        ]}
       >
-        <Text style={[pickerStyles.itemText, item === selected && pickerStyles.itemTextSelected]}>
+        <Text style={[pickerStyles.itemText, isSelected && pickerStyles.itemTextSelected]}>
           {label ? label(item) : pad(item)}
         </Text>
-      </TouchableOpacity>
-    ))}
-  </ScrollView>
-)
+      </Pressable>
+    )
+  }
+
+  return (
+    <FlatList
+      data={items}
+      renderItem={renderItem}
+      keyExtractor={(item) => item.toString()}
+      style={pickerStyles.column}
+      showsVerticalScrollIndicator={false}
+      initialScrollIndex={items.indexOf(selected) > 0 ? items.indexOf(selected) : 0}
+      getItemLayout={(data, index) => ({
+        length: 48,
+        offset: 48 * index,
+        index,
+      })}
+    />
+  )
+}
 
 const pickerStyles = StyleSheet.create({
-  column: { flex: 1, maxHeight: 200 },
+  column: { flex: 1, maxHeight: 240 },
   item: {
-    paddingVertical: 12,
-    paddingHorizontal: 8,
+    paddingVertical: 14,
+    paddingHorizontal: 12,
     alignItems: 'center',
-    borderRadius: 6,
-    minHeight: 44, // Ensure touch target is large enough
+    justifyContent: 'center',
+    borderRadius: 8,
+    minHeight: 48,
+    marginVertical: 2,
   },
-  itemSelected: { backgroundColor: colors.light.primary + '20' },
-  itemText: { ...typography.body, color: colors.light.textSecondary, fontSize: 16 },
-  itemTextSelected: { color: colors.light.primary, fontWeight: '600', fontSize: 18 },
+  itemSelected: { backgroundColor: colors.light.primary + '30' },
+  itemPressed: { backgroundColor: colors.light.primary + '15' },
+  itemText: { fontSize: 18, color: colors.light.textSecondary },
+  itemTextSelected: { color: colors.light.primary, fontWeight: '700', fontSize: 20 },
 })
 
 export const WeightInput: React.FC<WeightInputProps> = ({ onSubmit, initialWeight }) => {

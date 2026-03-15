@@ -7,6 +7,7 @@ import {
   Alert,
   TouchableOpacity,
   ActivityIndicator,
+  StatusBar,
 } from 'react-native'
 import { WeightInput } from '../components/WeightInput'
 import { WaterIntakeBar } from '../components/WaterIntakeBar'
@@ -112,6 +113,10 @@ export const RecordScreen = () => {
 
   return (
     <View style={styles.safeArea}>
+      <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>📝 记录</Text>
+      </View>
       <ScrollView
         style={styles.container}
         contentContainerStyle={styles.content}
@@ -181,6 +186,19 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: colors.light.background,
+  },
+  header: {
+    backgroundColor: '#FFFFFF',
+    paddingTop: 50,
+    paddingBottom: 16,
+    paddingHorizontal: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E5E5EA',
+  },
+  headerTitle: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: colors.light.text,
   },
   container: {
     flex: 1,
