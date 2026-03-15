@@ -8,7 +8,7 @@ import {
 } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { BMIGauge } from '../components/BMIGauge'
-import { TrendChart } from '../components/TrendChart'
+// import { TrendChart } from '../components/TrendChart'
 import { colors, typography } from '../theme'
 import { storage, STORAGE_KEYS } from '../utils/storage'
 
@@ -103,7 +103,9 @@ export const InsightsScreen: React.FC = () => {
         <BMIGauge weight={latestWeight} height={height} onHeightChange={handleHeightChange} />
 
         <Text style={styles.sectionTitle}>体重趋势</Text>
-        <TrendChart records={chartRecords} />
+        <View style={styles.tipsCard}>
+          <Text style={styles.tipText}>图表功能开发中...</Text>
+        </View>
 
         <Text style={styles.sectionTitle}>健康建议</Text>
         <View style={styles.tipsCard}>
