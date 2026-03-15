@@ -71,7 +71,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onLogout }) => {
   }, [onLogout])
 
   return (
-    <SafeAreaView style={styles.safeArea} edges={['bottom']}>
+    <SafeAreaView style={styles.safeArea} >
       <ScrollView
         style={styles.container}
         contentContainerStyle={styles.content}

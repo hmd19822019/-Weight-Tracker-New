@@ -103,7 +103,7 @@ export const FoodScreen: React.FC = () => {
   }, [loadRecords])
 
   return (
-    <SafeAreaView style={styles.safeArea} edges={['bottom']}>
+    <SafeAreaView style={styles.safeArea} >
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         {/* 今日卡路里进度 */}
         <View style={styles.summaryCard}>

@@ -32,7 +32,7 @@ export const AchievementsScreen: React.FC = () => {
   }, [loadAchievements])
 
   return (
-    <SafeAreaView style={styles.safeArea} edges={['bottom']}>
+    <SafeAreaView style={styles.safeArea} >
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.summary}>
           <Text style={styles.summaryCount}>{unlocked.length}</Text>

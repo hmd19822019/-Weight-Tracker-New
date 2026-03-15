@@ -85,7 +85,6 @@ export const InsightsScreen: React.FC = () => {
     ? [...records].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())[0].weight
     : 0
 
-  const chartRecords = records.map(r => ({ date: new Date(r.date), weight: r.weight }))
   const tips = getHealthTips(records)
 
   if (loading) {
@@ -97,7 +96,7 @@ export const InsightsScreen: React.FC = () => {
   }
 
   return (
-    <SafeAreaView style={styles.safeArea} edges={['bottom']}>
+    <SafeAreaView style={styles.safeArea} >
       <ScrollView style={styles.container} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <Text style={styles.sectionTitle}>BMI 分析</Text>
         <BMIGauge weight={latestWeight} height={height} onHeightChange={handleHeightChange} />

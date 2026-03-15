@@ -102,7 +102,7 @@ export const HistoryScreen = () => {
   )
 
   return (
-    <SafeAreaView style={styles.safeArea} edges={['bottom']}>
+    <SafeAreaView style={styles.safeArea} >
       <FlatList
         data={records}
         renderItem={renderItem}
