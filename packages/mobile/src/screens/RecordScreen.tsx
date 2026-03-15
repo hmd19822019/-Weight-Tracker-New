@@ -72,8 +72,17 @@ export const RecordScreen = () => {
 
         // Load existing records
         console.log('[RecordScreen] Loading existing records...')
-        const existing = await storage.getItem<any[]>(STORAGE_KEYS.USER_DATA) || []
-        console.log('[RecordScreen] Existing records count:', existing.length)
+        const existing = await storage.getItem<any[]>(STORAGE_KEYS.USER_DATA)
+        console.log('[RecordScreen] Existing records raw:', existing)
+
+        // Ensure existing is a valid array
+        let recordsArray = []
+        if (existing && Array.isArray(existing)) {
+          recordsArray = existing
+        } else if (existing) {
+          console.warn('[RecordScreen] Existing data is not an array, resetting to empty array')
+        }
+        console.log('[RecordScreen] Existing records count:', recordsArray.length)
 
         const newRecord = {
           id: Date.now().toString(),
@@ -84,10 +93,18 @@ export const RecordScreen = () => {
         }
         console.log('[RecordScreen] Saving new record:', newRecord)
 
-        await storage.setItem(STORAGE_KEYS.USER_DATA, [...existing, newRecord])
+        // Use concat instead of spread operator for better compatibility
+        const updatedRecords = recordsArray.concat([newRecord])
+        console.log('[RecordScreen] Updated records count:', updatedRecords.length)
+
+        await storage.setItem(STORAGE_KEYS.USER_DATA, updatedRecords)
         console.log('[RecordScreen] Record saved successfully')
 
-        setTodayStats((prev) => ({ ...prev, lastWeight: weight }))
+        // Update state without spread operator
+        setTodayStats((prev) => {
+          const updated = Object.assign({}, prev, { lastWeight: weight })
+          return updated
+        })
         Alert.alert('成功', `体重 ${weight}kg 已记录`)
       } catch (error) {
         console.error('[RecordScreen] Failed to save weight record:', error)
@@ -107,7 +124,7 @@ export const RecordScreen = () => {
   const handleWaterAdd = useCallback(async (amount: number) => {
     setTodayStats((prev) => {
       const newIntake = prev.waterIntake + amount
-      return { ...prev, waterIntake: newIntake }
+      return Object.assign({}, prev, { waterIntake: newIntake })
     })
   }, [])
 
