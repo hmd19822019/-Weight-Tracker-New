@@ -30,8 +30,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 16,
     flex: 1,
-    marginHorizontal: 6,
-    marginBottom: 12,
   },
   title: {
     ...typography.caption,

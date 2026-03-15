@@ -187,7 +187,8 @@ const styles = StyleSheet.create({
   },
   statsGrid: {
     flexDirection: 'row',
-    marginHorizontal: -6,
+    gap: 12,
+    marginBottom: 12,
   },
   sectionTitle: {
     ...typography.h3,
