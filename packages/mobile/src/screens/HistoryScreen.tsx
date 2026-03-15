@@ -7,7 +7,7 @@ import {
   Alert,
   RefreshControl,
 } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
+
 import { RecordCard } from '../components/RecordCard'
 import { colors, typography } from '../theme'
 import { storage, STORAGE_KEYS } from '../utils/storage'
@@ -102,7 +102,7 @@ export const HistoryScreen = () => {
   )
 
   return (
-    <SafeAreaView style={styles.safeArea} >
+    <View style={styles.safeArea} >
       <FlatList
         data={records}
         renderItem={renderItem}
@@ -118,7 +118,7 @@ export const HistoryScreen = () => {
         }
         showsVerticalScrollIndicator={false}
       />
-    </SafeAreaView>
+    </View>
   )
 }
 

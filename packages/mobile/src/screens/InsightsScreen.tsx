@@ -6,7 +6,7 @@ import {
   StyleSheet,
   ActivityIndicator,
 } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
+
 import { BMIGauge } from '../components/BMIGauge'
 // import { TrendChart } from '../components/TrendChart'
 import { colors, typography } from '../theme'
@@ -96,7 +96,7 @@ export const InsightsScreen: React.FC = () => {
   }
 
   return (
-    <SafeAreaView style={styles.safeArea} >
+    <View style={styles.safeArea} >
       <ScrollView style={styles.container} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <Text style={styles.sectionTitle}>BMI 分析</Text>
         <BMIGauge weight={latestWeight} height={height} onHeightChange={handleHeightChange} />
@@ -116,7 +116,7 @@ export const InsightsScreen: React.FC = () => {
           ))}
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   )
 }
 

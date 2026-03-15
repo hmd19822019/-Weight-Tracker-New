@@ -8,7 +8,7 @@ import {
   Alert,
   ActivityIndicator,
 } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
+
 import { colors, typography } from '../theme'
 import { storage, STORAGE_KEYS } from '../utils/storage'
 
@@ -78,7 +78,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
   }
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <View style={styles.safeArea}>
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.title}>欢迎使用</Text>
@@ -158,7 +158,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
           测试环境：任意手机号 + 验证码 123456
         </Text>
       </View>
-    </SafeAreaView>
+    </View>
   )
 }
 

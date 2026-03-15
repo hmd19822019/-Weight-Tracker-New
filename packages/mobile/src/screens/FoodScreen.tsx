@@ -3,7 +3,7 @@ import {
   View, Text, ScrollView, StyleSheet, TouchableOpacity,
   TextInput, Alert, ActivityIndicator, Image,
 } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
+
 import { colors, typography } from '../theme'
 import { storage, STORAGE_KEYS } from '../utils/storage'
 
@@ -103,7 +103,7 @@ export const FoodScreen: React.FC = () => {
   }, [loadRecords])
 
   return (
-    <SafeAreaView style={styles.safeArea} >
+    <View style={styles.safeArea} >
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         {/* 今日卡路里进度 */}
         <View style={styles.summaryCard}>
@@ -166,7 +166,7 @@ export const FoodScreen: React.FC = () => {
           </View>
         )}
       </ScrollView>
-    </SafeAreaView>
+    </View>
   )
 }
 

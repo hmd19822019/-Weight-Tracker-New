@@ -24,16 +24,21 @@ function formatDate(d: Date) {
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`
 }
 
-const HOURS = Array.from({ length: 24 }, (_, i) => i)
-const MINUTES = Array.from({ length: 60 }, (_, i) => i)
+// Generate arrays without Array.from for better compatibility
+const HOURS = [...new Array(24)].map((_, i) => i)
+const MINUTES = [...new Array(60)].map((_, i) => i)
 
 function buildDays(year: number, month: number) {
   const count = new Date(year, month + 1, 0).getDate()
-  return Array.from({ length: count }, (_, i) => i + 1)
+  const days = []
+  for (let i = 1; i <= count; i++) {
+    days.push(i)
+  }
+  return days
 }
 
-const MONTHS = Array.from({ length: 12 }, (_, i) => i)
-const YEARS = Array.from({ length: 5 }, (_, i) => new Date().getFullYear() - i)
+const MONTHS = [...new Array(12)].map((_, i) => i)
+const YEARS = [...new Array(5)].map((_, i) => new Date().getFullYear() - i)
 
 interface PickerColumnProps {
   items: number[]
@@ -43,12 +48,20 @@ interface PickerColumnProps {
 }
 
 const PickerColumn: React.FC<PickerColumnProps> = ({ items, selected, onSelect, label }) => (
-  <ScrollView style={pickerStyles.column} showsVerticalScrollIndicator={false}>
+  <ScrollView
+    style={pickerStyles.column}
+    showsVerticalScrollIndicator={false}
+    nestedScrollEnabled={true}
+  >
     {items.map((item) => (
       <TouchableOpacity
         key={item}
         style={[pickerStyles.item, item === selected && pickerStyles.itemSelected]}
-        onPress={() => onSelect(item)}
+        onPress={() => {
+          console.log('[PickerColumn] Item pressed:', item)
+          onSelect(item)
+        }}
+        activeOpacity={0.6}
       >
         <Text style={[pickerStyles.itemText, item === selected && pickerStyles.itemTextSelected]}>
           {label ? label(item) : pad(item)}
@@ -60,10 +73,16 @@ const PickerColumn: React.FC<PickerColumnProps> = ({ items, selected, onSelect, 
 
 const pickerStyles = StyleSheet.create({
   column: { flex: 1, maxHeight: 200 },
-  item: { paddingVertical: 10, alignItems: 'center', borderRadius: 6 },
+  item: {
+    paddingVertical: 12,
+    paddingHorizontal: 8,
+    alignItems: 'center',
+    borderRadius: 6,
+    minHeight: 44, // Ensure touch target is large enough
+  },
   itemSelected: { backgroundColor: colors.light.primary + '20' },
-  itemText: { ...typography.body, color: colors.light.textSecondary },
-  itemTextSelected: { color: colors.light.primary, fontWeight: '600' },
+  itemText: { ...typography.body, color: colors.light.textSecondary, fontSize: 16 },
+  itemTextSelected: { color: colors.light.primary, fontWeight: '600', fontSize: 18 },
 })
 
 export const WeightInput: React.FC<WeightInputProps> = ({ onSubmit, initialWeight }) => {

@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import { WeightInput } from '../components/WeightInput'
 import { WaterIntakeBar } from '../components/WaterIntakeBar'
 import { SyncStatus } from '../components/SyncStatus'
@@ -112,7 +111,7 @@ export const RecordScreen = () => {
   }, [])
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <View style={styles.safeArea}>
       <ScrollView
         style={styles.container}
         contentContainerStyle={styles.content}
@@ -174,7 +173,7 @@ export const RecordScreen = () => {
           onAdd={handleWaterAdd}
         />
       </ScrollView>
-    </SafeAreaView>
+    </View>
   )
 }
 

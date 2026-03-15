@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { View, Text, ScrollView, StyleSheet, Modal, TouchableOpacity } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
+
 import { AchievementType } from '@weight-tracker/shared'
 import { AchievementBadge } from '../components/AchievementBadge'
 import { ACHIEVEMENT_DEFS, checkAchievements } from '../utils/achievementService'
@@ -32,7 +32,7 @@ export const AchievementsScreen: React.FC = () => {
   }, [loadAchievements])
 
   return (
-    <SafeAreaView style={styles.safeArea} >
+    <View style={styles.safeArea} >
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.summary}>
           <Text style={styles.summaryCount}>{unlocked.length}</Text>
@@ -74,7 +74,7 @@ export const AchievementsScreen: React.FC = () => {
           </View>
         </View>
       </Modal>
-    </SafeAreaView>
+    </View>
   )
 }
 

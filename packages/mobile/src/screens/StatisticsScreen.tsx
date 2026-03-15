@@ -6,7 +6,7 @@ import {
   StyleSheet,
   Dimensions,
 } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
+
 import { LineChart } from 'react-native-chart-kit'
 import { StatCard } from '../components/StatCard'
 import { colors, typography } from '../theme'
@@ -76,7 +76,7 @@ export const StatisticsScreen = () => {
   const hasChartData = chartData.length >= 2
 
   return (
-    <SafeAreaView style={styles.safeArea} >
+    <View style={styles.safeArea} >
       <ScrollView
         style={styles.container}
         contentContainerStyle={styles.content}
@@ -170,7 +170,7 @@ export const StatisticsScreen = () => {
           </View>
         )}
       </ScrollView>
-    </SafeAreaView>
+    </View>
   )
 }
 

@@ -8,7 +8,7 @@ import {
   Switch,
   Alert,
 } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
+
 import { colors, typography } from '../theme'
 import { storage, STORAGE_KEYS } from '../utils/storage'
 
@@ -71,7 +71,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onLogout }) => {
   }, [onLogout])
 
   return (
-    <SafeAreaView style={styles.safeArea} >
+    <View style={styles.safeArea} >
       <ScrollView
         style={styles.container}
         contentContainerStyle={styles.content}
@@ -135,7 +135,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onLogout }) => {
           <Text style={styles.copyright}>© 2026 体重追踪助手</Text>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   )
 }
 
