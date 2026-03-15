@@ -68,8 +68,13 @@ export const RecordScreen = () => {
     async (weight: number, date: Date, notes?: string) => {
       setSaving(true)
       try {
+        console.log('[RecordScreen] Starting weight submission:', { weight, date, notes })
+
         // Load existing records
+        console.log('[RecordScreen] Loading existing records...')
         const existing = await storage.getItem<any[]>(STORAGE_KEYS.USER_DATA) || []
+        console.log('[RecordScreen] Existing records count:', existing.length)
+
         const newRecord = {
           id: Date.now().toString(),
           weight,
@@ -77,11 +82,21 @@ export const RecordScreen = () => {
           notes,
           syncStatus: 'local',
         }
+        console.log('[RecordScreen] Saving new record:', newRecord)
+
         await storage.setItem(STORAGE_KEYS.USER_DATA, [...existing, newRecord])
+        console.log('[RecordScreen] Record saved successfully')
+
         setTodayStats((prev) => ({ ...prev, lastWeight: weight }))
         Alert.alert('成功', `体重 ${weight}kg 已记录`)
       } catch (error) {
-        Alert.alert('错误', '记录失败，请重试')
+        console.error('[RecordScreen] Failed to save weight record:', error)
+        const errorMessage = error instanceof Error ? error.message : String(error)
+        Alert.alert(
+          '记录失败',
+          `保存失败，请重试\n\n错误详情：${errorMessage}`,
+          [{ text: '确定' }]
+        )
       } finally {
         setSaving(false)
       }
