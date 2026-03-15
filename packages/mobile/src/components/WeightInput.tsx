@@ -8,7 +8,7 @@ import {
   Alert,
   Modal,
   Pressable,
-  FlatList,
+  ScrollView,
 } from 'react-native'
 import { colors, typography } from '../theme'
 
@@ -81,46 +81,47 @@ interface PickerColumnProps {
 }
 
 const PickerColumn: React.FC<PickerColumnProps> = ({ items, selected, onSelect, label }) => {
-  const renderItem = ({ item }: { item: number }) => {
-    const isSelected = item === selected
-    return (
-      <Pressable
-        onPress={() => {
-          console.log('[PickerColumn] Item pressed:', item)
-          onSelect(item)
-        }}
-        style={({ pressed }) => [
-          pickerStyles.item,
-          isSelected && pickerStyles.itemSelected,
-          pressed && pickerStyles.itemPressed,
-        ]}
-      >
-        <Text style={[pickerStyles.itemText, isSelected && pickerStyles.itemTextSelected]}>
-          {label ? label(item) : pad(item)}
-        </Text>
-      </Pressable>
-    )
-  }
+  console.log('[PickerColumn] Rendering with items:', items.length, 'selected:', selected)
 
   return (
-    <FlatList
-      data={items}
-      renderItem={renderItem}
-      keyExtractor={(item) => item.toString()}
+    <ScrollView
       style={pickerStyles.column}
-      showsVerticalScrollIndicator={false}
-      initialScrollIndex={items.indexOf(selected) > 0 ? items.indexOf(selected) : 0}
-      getItemLayout={(data, index) => ({
-        length: 48,
-        offset: 48 * index,
-        index,
+      showsVerticalScrollIndicator={true}
+      contentContainerStyle={pickerStyles.columnContent}
+    >
+      {items.map((item) => {
+        const isSelected = item === selected
+        return (
+          <Pressable
+            key={item}
+            onPress={() => {
+              console.log('[PickerColumn] Item pressed:', item)
+              onSelect(item)
+            }}
+            style={({ pressed }) => [
+              pickerStyles.item,
+              isSelected && pickerStyles.itemSelected,
+              pressed && pickerStyles.itemPressed,
+            ]}
+          >
+            <Text style={[pickerStyles.itemText, isSelected && pickerStyles.itemTextSelected]}>
+              {label ? label(item) : pad(item)}
+            </Text>
+          </Pressable>
+        )
       })}
-    />
+    </ScrollView>
   )
 }
 
 const pickerStyles = StyleSheet.create({
-  column: { flex: 1, maxHeight: 240 },
+  column: {
+    flex: 1,
+    maxHeight: 240,
+  },
+  columnContent: {
+    paddingVertical: 8,
+  },
   item: {
     paddingVertical: 14,
     paddingHorizontal: 12,
@@ -308,6 +309,7 @@ const styles = StyleSheet.create({
   pickerRow: {
     flexDirection: 'row',
     gap: 4,
+    height: 260,
   },
   pickerGroup: {
     flex: 1,
